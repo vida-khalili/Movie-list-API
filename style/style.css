@@ -154,6 +154,8 @@ form {
 }
 
 .list-item {
+  padding: 4px;
+  cursor: pointer;
   height: 80px;
   padding: 4px;
   display: flex;
@@ -161,6 +163,11 @@ form {
   align-items: center;
   margin-bottom: 8px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.list-item:hover {
+  background-color: #dab482;
+  border-radius: 16px;
 }
 
 .list-item-poster {
@@ -210,6 +217,7 @@ form {
 }
 
 .movie-title {
+  line-height: 32px;
   font-size: 32px;
   font-weight: 700;
 }
@@ -220,6 +228,10 @@ form {
 
 strong {
   font-weight: 700;
+}
+.loading {
+  font-weight: 700;
+  text-align: center;
 }
 
 @media screen and (max-width: 900px) {

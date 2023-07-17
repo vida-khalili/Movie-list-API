@@ -49,10 +49,10 @@ const generateSearchList = (event) => {
     setTimeout(() => {
       listElement.style.display = "block";
       let popupList = `<ul class="popup-list">`;
-      searchArray.map((item) => {
+      searchArray.map((item, index) => {
         popupList =
           popupList +
-          `<li class="list-item">
+          `<li class="list-item" onclick="handleCardClick(event , ${index})">
               <img src="${
                 item.Poster != "N/A" ? item.Poster : "./../images/no-image.png"
               }" alt="poster" class="list-item-poster">
@@ -68,13 +68,49 @@ const generateSearchList = (event) => {
   }
 };
 
+const handleCardClick = (event, index) => {
+  event.preventDefault();
+  movieTitle = searchArray[index].Title;
+  getMovieDetails();
+  document.querySelector(".search-list-popup").style.display = "none";
+  let movieDetailsElement = document.querySelector(".movie-details-part");
+  movieDetailsElement.innerHTML = `<div class="loading">Loading...Please wait</div>`;
+  setTimeout(() => {
+    movieDetailsElement.innerHTML = `<div class="movie-details">
+            <img src="${
+              movieDetails.Poster != "N/A"
+                ? movieDetails.Poster
+                : "./images//no-image.png"
+            }" alt="movie image" class="movie-poster">
+            <div class="movie-details-content">
+              <h2 class="movie-title">${movieDetails.Title}</h2>
+              <div class="genre-year">
+                <div class="genre">${movieDetails.Genre}</div>
+                <div class="year">${movieDetails.Year}</div>
+              </div>
+              <div class="director"><strong>Director</strong>: ${
+                movieDetails.Director
+              }</div>
+              <div class="actors"><strong>Actors</strong>: ${
+                movieDetails.Actors
+              }</div>
+              <div class="plot">
+                <strong>Plot</strong>: ${movieDetails.Plot}
+              </div>
+            </div>
+          </div>`;
+  }, 1000);
+  searchInput.value = "";
+};
+
 const handleSubmit = (event) => {
   event.preventDefault();
   movieTitle = searchInput.value;
   getMovieDetails();
   document.querySelector(".search-list-popup").style.display = "none";
+  let movieDetailsElement = document.querySelector(".movie-details-part");
+  movieDetailsElement.innerHTML = `<div class="loading">Loading...Please wait</div>`;
   setTimeout(() => {
-    let movieDetailsElement = document.querySelector(".movie-details-part");
     movieDetailsElement.innerHTML = `<div class="movie-details">
           <img src="${
             movieDetails.Poster != "N/A"
