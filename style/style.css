@@ -234,6 +234,14 @@ strong {
   text-align: center;
 }
 
+.search-error {
+  text-align: center;
+  font-size: 14px;
+  line-height: 22px;
+  height: 120px;
+  padding: 8px;
+}
+
 @media screen and (max-width: 900px) {
   .container * {
     transform: scale(0.9);

@@ -4,6 +4,8 @@ let searchArray = [];
 let searchTitle;
 let movieTitle;
 let movieDetails;
+let listElement = document.querySelector(".search-list-popup");
+let movieDetailsElement = document.querySelector(".movie-details-part");
 
 let fetchSearchAPI = async () => {
   try {
@@ -29,54 +31,53 @@ let fetchDetailsAPI = async () => {
   }
 };
 
-const getMoviesList = async () => {
-  moviesList = await fetchSearchAPI();
-  searchArray = moviesList.Search;
-  return searchArray;
-};
-
-const getMovieDetails = async () => {
-  movieDetails = await fetchDetailsAPI();
-  return movieDetails;
-};
-
-const generateSearchList = (event) => {
+const generateSearchList = async (event) => {
   event.preventDefault();
-  searchTitle = searchInput.value;
-  getMoviesList();
-  let listElement = document.querySelector(".search-list-popup");
+  searchTitle = event.target.value;
+
   if (searchTitle.length >= 3) {
-    setTimeout(() => {
-      listElement.style.display = "block";
-      let popupList = `<ul class="popup-list">`;
-      searchArray.map((item, index) => {
-        popupList =
-          popupList +
-          `<li class="list-item" onclick="handleCardClick(event , ${index})">
+    try {
+      moviesList = await fetchSearchAPI();
+      if (moviesList.Response === "True") {
+        searchArray = moviesList.Search;
+        listElement.style.display = "block";
+        let popupList = `<ul class="popup-list">`;
+        searchArray.map((item, index) => {
+          popupList =
+            popupList +
+            `<li class="list-item" onclick="handleCardClick(event , ${index})">
               <img src="${
                 item.Poster != "N/A" ? item.Poster : "./../images/no-image.png"
               }" alt="poster" class="list-item-poster">
               <div class="list-item-title">${item.Title}</div>
               <div class="list-item-year">${item.Year}</div>
             </li>`;
-      });
-      popupList = popupList + `</ul>`;
-      listElement.innerHTML = popupList;
-    }, 2000);
+        });
+        popupList = popupList + `</ul>`;
+        listElement.innerHTML = popupList;
+      } else {
+        listElement.innerHTML = `<div class="search-error">
+(⊙_◎)
+        <br />
+        couldn't find anything yet! <br/>
+ Check for typo in your search or type more character to complete</div>`;
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   } else if (searchTitle.length < 3) {
     listElement.style.display = "none";
   }
 };
 
-const handleCardClick = (event, index) => {
+const handleCardClick = async (event, index) => {
   event.preventDefault();
   movieTitle = searchArray[index].Title;
-  getMovieDetails();
   document.querySelector(".search-list-popup").style.display = "none";
-  let movieDetailsElement = document.querySelector(".movie-details-part");
+
   movieDetailsElement.innerHTML = `<div class="loading">Loading...Please wait</div>`;
-  setTimeout(() => {
-    movieDetailsElement.innerHTML = `<div class="movie-details">
+  movieDetails = await fetchDetailsAPI();
+  movieDetailsElement.innerHTML = `<div class="movie-details">
             <img src="${
               movieDetails.Poster != "N/A"
                 ? movieDetails.Poster
@@ -99,16 +100,14 @@ const handleCardClick = (event, index) => {
               </div>
             </div>
           </div>`;
-  }, 1000);
   searchInput.value = "";
 };
 
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
   event.preventDefault();
   movieTitle = searchInput.value;
-  getMovieDetails();
+  movieDetails = await fetchDetailsAPI();
   document.querySelector(".search-list-popup").style.display = "none";
-  let movieDetailsElement = document.querySelector(".movie-details-part");
   movieDetailsElement.innerHTML = `<div class="loading">Loading...Please wait</div>`;
   setTimeout(() => {
     movieDetailsElement.innerHTML = `<div class="movie-details">
