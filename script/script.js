@@ -8,7 +8,7 @@ let movieDetails;
 let fetchSearchAPI = async () => {
   try {
     const response = await fetch(
-      `http://www.omdbapi.com/?apikey=${apiKey}&s=${searchTitle}`
+      `https://www.omdbapi.com/?apikey=${apiKey}&s=${searchTitle}`
     );
     const result = await response.json();
     return result;
@@ -20,7 +20,7 @@ let fetchSearchAPI = async () => {
 let fetchDetailsAPI = async () => {
   try {
     const response = await fetch(
-      `http://www.omdbapi.com/?apikey=${apiKey}&t=${movieTitle}`
+      `https://www.omdbapi.com/?apikey=${apiKey}&t=${movieTitle}`
     );
     const result = await response.json();
     return result;
